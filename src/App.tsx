@@ -9,6 +9,7 @@ import { IProduct } from "./interfaces";
 import { productValidation } from "./validation";
 import ErrorMessage from "./components/ErrorMessage";
 import CircleColor from "./components/ui/CircleColor";
+import { v4 as uuid } from "uuid";
 
 function App() {
   const defaultProduct: IProduct = {
@@ -24,6 +25,7 @@ function App() {
   };
   /* ----------- STATES ----------- */
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [products, setProducts] = useState<IProduct[]>(productList);
   const [formData, setFormData] = useState<IProduct>(defaultProduct);
   const [tempColors, setTempColors] = useState<string[]>([]);
   const [errors, setErrors] = useState({
@@ -32,8 +34,6 @@ function App() {
     imageURL: "",
     price: "",
   });
-
-  console.log(tempColors);
 
   /* ----------- HANDLERS ----------- */
   const openModal = () => setIsOpen(true);
@@ -63,7 +63,13 @@ function App() {
       setErrors(errors);
       return;
     }
-
+    setProducts((prev) => [
+      { ...formData, id: uuid(), colors: tempColors },
+      ...prev,
+    ]);
+    setFormData(defaultProduct);
+    setTempColors([]);
+    closeModal();
     console.log("Product added successfully");
   };
   const onCancel = () => {
@@ -72,7 +78,7 @@ function App() {
   };
 
   /* ----------- Render Product List ----------- */
-  const renderProductList = productList.map((product) => (
+  const renderProductList = products.map((product) => (
     <ProductCard key={product.id} product={product} />
   ));
   const renderFormInputs = formInputsList.map((input) => (
@@ -98,9 +104,11 @@ function App() {
       key={color}
       color={color}
       onClick={() => {
-        if (!tempColors.includes(color)) {
-          setTempColors((prev) => [...prev, color]);
+        if (tempColors.includes(color)) {
+          setTempColors((prev) => prev.filter((item) => item !== color));
+          return;
         }
+        setTempColors((prev) => [...prev, color]);
       }}
     />
   ));
@@ -117,6 +125,17 @@ function App() {
       <Modal isOpen={isOpen} closeModal={closeModal} title="ADD NEW PRODUCT">
         <form className="space-y-3" onSubmit={submitHandler}>
           {renderFormInputs}
+          <div className="flex items-center my-4 space-x-1 flex-wrap">
+            {tempColors.map((color) => (
+              <span
+                key={color}
+                style={{ backgroundColor: color }}
+                className="p-1 mr-1 mb-1 text-xs rounded-md text-white"
+              >
+                {color}
+              </span>
+            ))}
+          </div>
           <div className="flex items-center my-4 space-x-1 flex-wrap">
             {renderProductColors}
           </div>
