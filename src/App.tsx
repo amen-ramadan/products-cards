@@ -2,12 +2,13 @@ import { useState } from "react";
 import "./App.css";
 import ProductCard from "./components/ProductCard";
 import Modal from "./components/ui/Modal";
-import { formInputsList, productList } from "./data";
+import { colors, formInputsList, productList } from "./data";
 import Button from "./components/ui/Button";
 import Input from "./components/ui/Input";
 import { IProduct } from "./interfaces";
 import { productValidation } from "./validation";
 import ErrorMessage from "./components/ErrorMessage";
+import CircleColor from "./components/ui/CircleColor";
 
 function App() {
   const defaultProduct: IProduct = {
@@ -24,12 +25,15 @@ function App() {
   /* ----------- STATES ----------- */
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [formData, setFormData] = useState<IProduct>(defaultProduct);
+  const [tempColors, setTempColors] = useState<string[]>([]);
   const [errors, setErrors] = useState({
     title: "",
     description: "",
     imageURL: "",
     price: "",
   });
+
+  console.log(tempColors);
 
   /* ----------- HANDLERS ----------- */
   const openModal = () => setIsOpen(true);
@@ -89,6 +93,19 @@ function App() {
       <ErrorMessage message={errors[input.name]} />
     </div>
   ));
+  const renderProductColors = colors.map((color) => (
+    <CircleColor
+      key={color}
+      color={color}
+      onClick={() => {
+        if (!tempColors.includes(color)) {
+          setTempColors((prev) => [...prev, color]);
+        }
+      }}
+    />
+  ));
+
+  // ** application
   return (
     <main className="container">
       <Button className="bg-indigo-700 hover:bg-indigo-800" onClick={openModal}>
@@ -100,6 +117,9 @@ function App() {
       <Modal isOpen={isOpen} closeModal={closeModal} title="ADD NEW PRODUCT">
         <form className="space-y-3" onSubmit={submitHandler}>
           {renderFormInputs}
+          <div className="flex items-center my-4 space-x-1 flex-wrap">
+            {renderProductColors}
+          </div>
           <div className="flex items-center space-x-3">
             <Button className="bg-indigo-700 hover:bg-indigo-800">
               Submit
