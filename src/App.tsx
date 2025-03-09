@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import ProductCard from "./components/ProductCard";
 import Modal from "./components/ui/Modal";
+import Select from "./components/ui/Select";
 import { colors, formInputsList, productList } from "./data";
 import Button from "./components/ui/Button";
 import Input from "./components/ui/Input";
@@ -72,8 +73,16 @@ function App() {
     closeModal();
     console.log("Product added successfully");
   };
+
   const onCancel = () => {
     setFormData(defaultProduct);
+    setTempColors([]);
+    setErrors({
+      title: "",
+      description: "",
+      imageURL: "",
+      price: "",
+    });
     closeModal();
   };
 
@@ -117,7 +126,7 @@ function App() {
   return (
     <main className="container">
       <Button className="bg-indigo-700 hover:bg-indigo-800" onClick={openModal}>
-        Add
+        build new product
       </Button>
       <div className="m-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-4 p-2 rounded-md">
         {renderProductList}
@@ -125,6 +134,7 @@ function App() {
       <Modal isOpen={isOpen} closeModal={closeModal} title="ADD NEW PRODUCT">
         <form className="space-y-3" onSubmit={submitHandler}>
           {renderFormInputs}
+          <Select />
           <div className="flex items-center my-4 space-x-1 flex-wrap">
             {tempColors.map((color) => (
               <span
