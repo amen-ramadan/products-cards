@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import {
   Label,
   Listbox,
@@ -11,10 +8,13 @@ import {
 import { ChevronUpDownIcon } from "@heroicons/react/16/solid";
 import { CheckIcon } from "@heroicons/react/20/solid";
 import { categories } from "../../data";
+import { ICategory } from "../../interfaces";
 
-export default function Example() {
-  const [selected, setSelected] = useState(categories[0]);
-
+interface IProps {
+  selected: ICategory;
+  setSelected: (selected: ICategory) => void;
+}
+export default function Select({ selected, setSelected }: IProps) {
   return (
     <Listbox value={selected} onChange={setSelected}>
       <Label className="block text-sm/6 font-medium text-gray-900 mb-0.5">

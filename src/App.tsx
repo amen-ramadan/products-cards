@@ -3,7 +3,7 @@ import "./App.css";
 import ProductCard from "./components/ProductCard";
 import Modal from "./components/ui/Modal";
 import Select from "./components/ui/Select";
-import { colors, formInputsList, productList } from "./data";
+import { categories, colors, formInputsList, productList } from "./data";
 import Button from "./components/ui/Button";
 import Input from "./components/ui/Input";
 import { IProduct } from "./interfaces";
@@ -34,7 +34,9 @@ function App() {
     description: "",
     imageURL: "",
     price: "",
+    colors: "",
   });
+  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
 
   /* ----------- HANDLERS ----------- */
   const openModal = () => setIsOpen(true);
@@ -52,8 +54,14 @@ function App() {
 
   const submitHandler = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    const { title, description, imageURL, price } = formData;
-    const errors = productValidation({ title, description, imageURL, price });
+    const { title, description, imageURL, price, colors } = formData;
+    const errors = productValidation({
+      title,
+      description,
+      imageURL,
+      price,
+      colors,
+    });
 
     // ** Check if there is a property has a value of "" && Check if all properties have a value of ""
     const hasErrorMsg =
@@ -65,7 +73,12 @@ function App() {
       return;
     }
     setProducts((prev) => [
-      { ...formData, id: uuid(), colors: tempColors },
+      {
+        ...formData,
+        id: uuid(),
+        colors: tempColors,
+        category: selectedCategory,
+      },
       ...prev,
     ]);
     setFormData(defaultProduct);
@@ -82,6 +95,7 @@ function App() {
       description: "",
       imageURL: "",
       price: "",
+      colors: "",
     });
     closeModal();
   };
@@ -134,7 +148,10 @@ function App() {
       <Modal isOpen={isOpen} closeModal={closeModal} title="ADD NEW PRODUCT">
         <form className="space-y-3" onSubmit={submitHandler}>
           {renderFormInputs}
-          <Select />
+          <Select
+            selected={selectedCategory}
+            setSelected={setSelectedCategory}
+          />
           <div className="flex items-center my-4 space-x-1 flex-wrap">
             {tempColors.map((color) => (
               <span
