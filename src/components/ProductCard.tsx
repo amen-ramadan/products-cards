@@ -8,11 +8,15 @@ interface IProps {
   product: IProduct;
   setProductEdit: (product: IProduct) => void;
   openEditModal: () => void;
+  idx: number;
+  setProductToEditIdx: (value: number) => void;
 }
 export default function ProductCard({
   product,
   setProductEdit,
   openEditModal,
+  idx,
+  setProductToEditIdx,
 }: IProps) {
   const { title, description, imageURL, price, colors, category } = product;
 
@@ -25,6 +29,7 @@ export default function ProductCard({
   const onEdit = (product: IProduct) => {
     setProductEdit(product);
     openEditModal();
+    setProductToEditIdx(idx);
   };
   return (
     <div className="max-w-sm md:max-w-lg mx-auto md:mx-0 border border-stone-300 rounded-md p-2 flex flex-col space-y-3">
