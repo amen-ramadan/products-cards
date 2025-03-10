@@ -12,6 +12,7 @@ import ErrorMessage from "./components/ErrorMessage";
 import CircleColor from "./components/ui/CircleColor";
 import { v4 as uuid } from "uuid";
 import { ProductNameTypes } from "./types";
+import toast, { Toaster } from "react-hot-toast";
 
 function App() {
   const defaultProduct: IProduct = {
@@ -151,6 +152,22 @@ function App() {
     closeModal();
   };
 
+  const removeProductHandler = () => {
+    const filtered = products.filter(
+      (product) => product.id !== productToEdit.id
+    );
+    setProducts(filtered);
+    closeConfirmModal();
+    toast.success("Product has been removed! ", {
+      icon: "👏",
+      style: {
+        borderRadius: "10px",
+        background: "#333",
+        color: "#fff",
+      },
+    });
+  };
+
   /* ----------- Render Product List ----------- */
   const renderProductList = products.map((product, index) => (
     <ProductCard
@@ -227,10 +244,11 @@ function App() {
   return (
     <main className="container">
       <Button
-        className="bg-indigo-600 hover:bg-indigo-700 text-white"
+        className="bg-indigo-600 hover:bg-indigo-700 block mx-auto my-10 px-10 font-medium text-white"
         onClick={openModal}
+        width="w-fit"
       >
-        build new product
+        Build a Product
       </Button>
       <div className="m-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-4 p-2 rounded-md">
         {renderProductList}
@@ -330,7 +348,10 @@ function App() {
         description="Deleting this product will remove it permanently from your inventory. Any associated data,sales history, and other related information will also be deleted . please make sure this is the intended action."
       >
         <div className="flex items-center space-x-3">
-          <Button className="bg-[#c2344d] hover:bg-[#922234] text-white">
+          <Button
+            className="bg-[#c2344d] hover:bg-[#922234] text-white"
+            onClick={removeProductHandler}
+          >
             Yes, remove
           </Button>
           <Button
@@ -341,6 +362,7 @@ function App() {
           </Button>
         </div>
       </Modal>
+      <Toaster position="top-center" reverseOrder={false} />
     </main>
   );
 }

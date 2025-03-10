@@ -1,5 +1,5 @@
 import { IProduct } from "../interfaces";
-import { textSlice } from "../utils/function";
+import { numberWithCommas, textSlice } from "../utils/function";
 import Image from "./Image";
 import Button from "./ui/Button";
 import CircleColor from "./ui/CircleColor";
@@ -28,13 +28,17 @@ export default function ProductCard({
   ));
 
   /* ----------- Handlers ----------- */
-  const onEdit = (product: IProduct) => {
+  const onEdit = () => {
     setProductEdit(product);
     openEditModal();
     setProductToEditIdx(idx);
   };
+  const onRemove = () => {
+    setProductEdit(product);
+    openConfirmModal();
+  };
   return (
-    <div className="max-w-sm md:max-w-lg mx-auto md:mx-0 border border-stone-300 rounded-md p-2 flex flex-col space-y-3">
+    <div className="max-w-sm md:max-w-lg mx-auto md:mx-0 border rounded-md p-2 flex flex-col space-y-3">
       <Image
         imageUrl={imageURL}
         alt="car"
@@ -49,7 +53,9 @@ export default function ProductCard({
       </div>
 
       <div className="flex items-center justify-between">
-        <span className="text-lg text-sky-600 font-semibold">${price}</span>
+        <span className="text-lg text-sky-600 font-semibold">
+          ${numberWithCommas(price)}
+        </span>
 
         <Image
           imageUrl={category.imageURL}
@@ -61,15 +67,15 @@ export default function ProductCard({
       <div className="flex items-center justify-between space-x-2">
         <Button
           className="bg-indigo-600 hover:bg-indigo-700 text-white"
-          onClick={() => onEdit(product)}
+          onClick={onEdit}
         >
           EDIT
         </Button>
         <Button
           className="bg-[#c2344d] hover:bg-[#922234] text-white"
-          onClick={() => openConfirmModal()}
+          onClick={onRemove}
         >
-          DELETE
+          Remove
         </Button>
       </div>
     </div>
