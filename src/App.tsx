@@ -282,10 +282,12 @@ function App() {
             "imageURL"
           )}
           {renderProductEditWithErrorMsg("price", "Product Price", "price")}
-          {/* <Select
-            selected={selectedCategory}
-            setSelected={setSelectedCategory}
-          /> */}
+          <Select
+            selected={productToEdit.category}
+            setSelected={(value) =>
+              setProductToEdit({ ...productToEdit, category: value })
+            }
+          />
           <div className="flex items-center my-4 space-x-1 flex-wrap">
             {tempColors.concat(productToEdit.colors).map((color) => (
               <span

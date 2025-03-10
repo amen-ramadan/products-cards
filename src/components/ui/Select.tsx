@@ -11,7 +11,7 @@ import { categories } from "../../data";
 import { ICategory } from "../../interfaces";
 
 interface IProps {
-  selected: ICategory;
+  selected: { name: string; imageURL: string };
   setSelected: (selected: ICategory) => void;
 }
 export default function Select({ selected, setSelected }: IProps) {
