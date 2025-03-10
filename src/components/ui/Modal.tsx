@@ -10,10 +10,11 @@ interface IProps {
   isOpen: boolean;
   closeModal: () => void;
   title?: string;
+  description?: string;
   children: React.ReactNode;
 }
 
-export default function Modal({ isOpen, closeModal, title, children }: IProps) {
+export default function Modal({ isOpen, closeModal, title, description, children }: IProps) {
   return (
     <>
       <Dialog
@@ -24,7 +25,7 @@ export default function Modal({ isOpen, closeModal, title, children }: IProps) {
       >
         <DialogBackdrop
           transition
-          className="fixed inset-0 bg-black/50 duration-300 ease-out data-[closed]:opacity-0"
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm duration-300 ease-out data-[closed]:opacity-0"
         />
         <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4">
@@ -39,6 +40,10 @@ export default function Modal({ isOpen, closeModal, title, children }: IProps) {
                 >
                   {title}
                 </DialogTitle>
+              )}
+
+              {description && (
+                <div className="mt-2 text-sm text-gray-600">{description}</div>
               )}
 
               <div className="mt-4">{children}</div>

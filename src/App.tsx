@@ -41,12 +41,15 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
   const [productToEdit, setProductToEdit] = useState<IProduct>(defaultProduct);
   const [productToEditIdx, setProductToEditIdx] = useState<number>(0);
+  const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false);
 
   /* ----------- HANDLERS ----------- */
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
   const openEditModal = () => setIsOpenEditModel(true);
   const closeEditModal = () => setIsOpenEditModel(false);
+  const openConfirmModal = () => setIsOpenConfirmModal(true);
+  const closeConfirmModal = () => setIsOpenConfirmModal(false);
 
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
@@ -155,6 +158,7 @@ function App() {
       product={product}
       setProductEdit={setProductToEdit}
       openEditModal={openEditModal}
+      openConfirmModal={openConfirmModal}
       idx={index}
       setProductToEditIdx={setProductToEditIdx}
     />
@@ -222,7 +226,10 @@ function App() {
   // ** application
   return (
     <main className="container">
-      <Button className="bg-indigo-700 hover:bg-indigo-800" onClick={openModal}>
+      <Button
+        className="bg-indigo-600 hover:bg-indigo-700 text-white"
+        onClick={openModal}
+      >
         build new product
       </Button>
       <div className="m-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-4 p-2 rounded-md">
@@ -251,11 +258,11 @@ function App() {
             {renderProductColors}
           </div>
           <div className="flex items-center space-x-3">
-            <Button className="bg-indigo-700 hover:bg-indigo-800">
+            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
               Submit
             </Button>
             <Button
-              className="bg-gray-500 hover:bg-gray-600"
+              className="bg-[#f5f5fa] hover:bg-gray-300 text-black"
               onClick={onCancel}
             >
               Close
@@ -303,17 +310,36 @@ function App() {
             {renderProductColors}
           </div>
           <div className="flex items-center space-x-3">
-            <Button className="bg-indigo-700 hover:bg-indigo-800">
+            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
               Submit
             </Button>
             <Button
-              className="bg-gray-500 hover:bg-gray-600"
+              className="bg-[#f5f5fa] hover:bg-gray-300 text-black"
               onClick={closeEditModal}
             >
               Close
             </Button>
           </div>
         </form>
+      </Modal>
+      {/* Delete Product Modal */}
+      <Modal
+        isOpen={isOpenConfirmModal}
+        closeModal={closeConfirmModal}
+        title="Are you sure you want to remove this product from your store?"
+        description="Deleting this product will remove it permanently from your inventory. Any associated data,sales history, and other related information will also be deleted . please make sure this is the intended action."
+      >
+        <div className="flex items-center space-x-3">
+          <Button className="bg-[#c2344d] hover:bg-[#922234] text-white">
+            Yes, remove
+          </Button>
+          <Button
+            className="bg-[#f5f5fa] hover:bg-gray-300 text-black"
+            onClick={closeConfirmModal}
+          >
+            Cancel
+          </Button>
+        </div>
       </Modal>
     </main>
   );

@@ -13,7 +13,7 @@ export default function Button({
 }: IProps) {
   return (
     <button
-      className={`${className} ${width} px-4 py-2 rounded-lg text-white cursor-pointer`}
+      className={` ${width} px-4 py-2 rounded-lg cursor-pointer ${className}`}
       {...rest}
     >
       {children}

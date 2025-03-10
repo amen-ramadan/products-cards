@@ -8,6 +8,7 @@ interface IProps {
   product: IProduct;
   setProductEdit: (product: IProduct) => void;
   openEditModal: () => void;
+  openConfirmModal: () => void;
   idx: number;
   setProductToEditIdx: (value: number) => void;
 }
@@ -17,6 +18,7 @@ export default function ProductCard({
   openEditModal,
   idx,
   setProductToEditIdx,
+  openConfirmModal,
 }: IProps) {
   const { title, description, imageURL, price, colors, category } = product;
 
@@ -57,10 +59,18 @@ export default function ProductCard({
       </div>
 
       <div className="flex items-center justify-between space-x-2">
-        <Button className="bg-indigo-700 " onClick={() => onEdit(product)}>
+        <Button
+          className="bg-indigo-600 hover:bg-indigo-700 text-white"
+          onClick={() => onEdit(product)}
+        >
           EDIT
         </Button>
-        <Button className="bg-red-700 ">DELETE</Button>
+        <Button
+          className="bg-[#c2344d] hover:bg-[#922234] text-white"
+          onClick={() => openConfirmModal()}
+        >
+          DELETE
+        </Button>
       </div>
     </div>
   );
