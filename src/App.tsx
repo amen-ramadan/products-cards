@@ -37,7 +37,6 @@ function App() {
     description: "",
     imageURL: "",
     price: "",
-    colors: "",
   });
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
   const [productToEdit, setProductToEdit] = useState<IProduct>(defaultProduct);
@@ -79,7 +78,6 @@ function App() {
       description,
       imageURL,
       price,
-      colors,
     });
 
     // ** Check if there is a property has a value of "" && Check if all properties have a value of ""
@@ -106,13 +104,12 @@ function App() {
   };
   const submitHandler = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    const { title, description, imageURL, price, colors } = formData;
+    const { title, description, imageURL, price } = formData;
     const errors = productValidation({
       title,
       description,
       imageURL,
       price,
-      colors,
     });
 
     // ** Check if there is a property has a value of "" && Check if all properties have a value of ""
@@ -147,7 +144,6 @@ function App() {
       description: "",
       imageURL: "",
       price: "",
-      colors: "",
     });
     closeModal();
   };
@@ -242,7 +238,7 @@ function App() {
 
   // ** application
   return (
-    <main className="container">
+    <main className="container mx-auto">
       <Button
         className="bg-indigo-600 hover:bg-indigo-700 block mx-auto my-10 px-10 font-medium text-white"
         onClick={openModal}

@@ -38,7 +38,7 @@ export default function ProductCard({
     openConfirmModal();
   };
   return (
-    <div className="max-w-sm md:max-w-lg mx-auto md:mx-0 border rounded-md p-2 flex flex-col space-y-3">
+    <div className="max-w-[330px] md:max-w-lg mx-auto md:mx-0 border rounded-md p-2 flex flex-col space-y-3">
       <Image
         imageUrl={imageURL}
         alt="car"
@@ -48,7 +48,7 @@ export default function ProductCard({
       <p className="text-xs text-gray-500 break-words">
         {textSlice(description)}
       </p>
-      <div className="flex items-center my-4 space-x-1 flex-wrap">
+      <div className="flex items-center my-4 space-x-1 flex-wrap min-h-[30px]">
         {renderProductColors}
       </div>
 
