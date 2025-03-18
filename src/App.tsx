@@ -47,24 +47,22 @@ function App() {
   const closeEditModal = () => setIsOpenEditModel(false);
   const closeConfirmModal = () => setIsOpenConfirmModal(false);
   const openConfirmModal = useCallback(() => setIsOpenConfirmModal(true), []);
-  const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = event.target;
-    setFormData({ ...formData, [name]: value });
-    // ** Validate the field as user types
-    setErrors({
-      ...errors,
-      [name]: "",
-    });
-  };
-  const onChangeEditHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = event.target;
-    setProductToEdit({ ...productToEdit, [name]: value });
-    // ** Validate the field as user types
-    setErrors({
-      ...errors,
-      [name]: "",
-    });
-  };
+  const onChangeHandler = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { value, name } = event.target;
+      setFormData((prev) => ({ ...prev, [name]: value }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    },
+    []
+  );
+  const onChangeEditHandler = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { value, name } = event.target;
+      setProductToEdit((prev) => ({ ...prev, [name]: value }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    },
+    []
+  );
 
   const submitEditHandler = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
