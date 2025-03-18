@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import "./App.css";
 import ProductCard from "./components/ProductCard";
 import Modal from "./components/ui/Modal";
@@ -21,13 +21,10 @@ function App() {
     imageURL: "",
     price: "",
     colors: [],
-    category: {
-      name: "",
-      imageURL: "",
-    },
+    category: categories[0], // استخدام أول فئة كقيمة افتراضية بدلاً من قيمة فارغة
   };
   /* ----------- STATES ----------- */
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpenAddModel, setIsOpenAddModel] = useState<boolean>(false);
   const [isOpenEditModel, setIsOpenEditModel] = useState<boolean>(false);
   const [products, setProducts] = useState<IProduct[]>(productList);
   const [formData, setFormData] = useState<IProduct>(defaultProduct);
@@ -44,13 +41,12 @@ function App() {
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false);
 
   /* ----------- HANDLERS ----------- */
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
-  const openEditModal = () => setIsOpenEditModel(true);
+  const openAddModal = () => setIsOpenAddModel(true);
+  const closeAddModal = () => setIsOpenAddModel(false);
+  const openEditModal = useCallback(() => setIsOpenEditModel(true), []);
   const closeEditModal = () => setIsOpenEditModel(false);
-  const openConfirmModal = () => setIsOpenConfirmModal(true);
   const closeConfirmModal = () => setIsOpenConfirmModal(false);
-
+  const openConfirmModal = useCallback(() => setIsOpenConfirmModal(true), []);
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
     setFormData({ ...formData, [name]: value });
@@ -80,12 +76,10 @@ function App() {
       price,
     });
 
-    // ** Check if there is a property has a value of "" && Check if all properties have a value of ""
-    const hasErrorMsg =
-      Object.values(errors).some((error) => error === "") &&
-      Object.values(errors).every((error) => error === "");
+    // ** Check if there are any errors
+    const hasErrors = Object.values(errors).some((error) => error !== "");
 
-    if (!hasErrorMsg) {
+    if (hasErrors) {
       setErrors(errors);
       return;
     }
@@ -112,12 +106,10 @@ function App() {
       price,
     });
 
-    // ** Check if there is a property has a value of "" && Check if all properties have a value of ""
-    const hasErrorMsg =
-      Object.values(errors).some((error) => error === "") &&
-      Object.values(errors).every((error) => error === "");
+    // ** Check if there are any errors
+    const hasErrors = Object.values(errors).some((error) => error !== "");
 
-    if (!hasErrorMsg) {
+    if (hasErrors) {
       setErrors(errors);
       return;
     }
@@ -132,7 +124,7 @@ function App() {
     ]);
     setFormData(defaultProduct);
     setTempColors([]);
-    closeModal();
+    closeEditModal();
     console.log("Product added successfully");
   };
 
@@ -145,7 +137,7 @@ function App() {
       imageURL: "",
       price: "",
     });
-    closeModal();
+    closeAddModal();
   };
 
   const removeProductHandler = () => {
@@ -241,7 +233,7 @@ function App() {
     <main className="container mx-auto">
       <Button
         className="bg-indigo-600 hover:bg-indigo-700 block mx-auto my-10 px-10 font-medium text-white"
-        onClick={openModal}
+        onClick={openAddModal}
         width="w-fit"
       >
         Build a Product
@@ -250,7 +242,11 @@ function App() {
         {renderProductList}
       </div>
       {/* Add Product Modal */}
-      <Modal isOpen={isOpen} closeModal={closeModal} title="ADD NEW PRODUCT">
+      <Modal
+        isOpen={isOpenAddModel}
+        closeModal={closeAddModal}
+        title="ADD NEW PRODUCT"
+      >
         <form className="space-y-3" onSubmit={submitHandler}>
           {renderFormInputs}
           <Select

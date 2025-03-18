@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { IProduct } from "../interfaces";
 import { numberWithCommas, textSlice } from "../utils/function";
 import Image from "./Image";
@@ -12,7 +13,7 @@ interface IProps {
   idx: number;
   setProductToEditIdx: (value: number) => void;
 }
-export default function ProductCard({
+function ProductCard({
   product,
   setProductEdit,
   openEditModal,
@@ -81,3 +82,4 @@ export default function ProductCard({
     </div>
   );
 }
+export default memo(ProductCard);
